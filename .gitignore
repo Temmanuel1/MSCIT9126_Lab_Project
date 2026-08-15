@@ -1,0 +1,14 @@
+.env
+*.key
+*.pem
+password
+secret
+*.tmp
+*.log
+~$*
+.DS_Store
+Thumbs.db
+*.iso
+*.ova
+*.pcap
+*.pcapng
