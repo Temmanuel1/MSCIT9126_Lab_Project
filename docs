@@ -1,0 +1,45 @@
+Replace every bracketed field with evidence from the authorised lab. Do not invent results.
+
+| Test | Command or filter | Expected | Actual | Evidence |
+> Metasploitable 2 replaces Windows XP only after lecturer approval. Replace MS08-067 with an exploit appropriate to an actual discovered service.
+
+| Test | Command or method | Expected | Actual | Evidence |
+|---|---|---|---|---|
+| XP full port scan | nmap -p- -sV 192.168.1.10 | Identify exposed services | [insert] | [screenshot] |
+| Guest OS detection | nmap -O -sV 172.16.0.10 | Identify likely OS | [insert] | [screenshot] |
+| XP vulnerability scan | nmap -sV --script vuln 192.168.1.10 | Identify supported findings | [insert] | [screenshot] |
+| Controlled exploit | MS08-067 module if applicable | Success or documented failure | [insert] | [screenshot] |
+| Full target scan | nmap -p- -sV 192.168.1.10 | Identify exposed services | [insert] | [screenshot] |
+| Vulnerability scripts | nmap -sV --script vuln 192.168.1.10 | Candidate findings | [insert] | [screenshot] |
+| Service validation | Metasploit search | Match module to exact service | [insert] | [screenshot] |
+| Controlled exploit | Approved matching module | Success or documented failure | [insert] | [screenshot] |
+| DMZ to LAN pivot | Connection attempt | Blocked | [insert] | [firewall log] |
+| Guest to LAN ping | ICMP | Blocked | [insert] | [capture and log] |
+| VPN to approved LAN service | OpenVPN client | Allowed | [insert] | [screenshot] |
+| VPN to Guest/DMZ | Connection attempt | Blocked | [insert] | [log] |
+| DMZ to Guest pivot | Connection attempt | Blocked | [insert] | [firewall log] |
+
+## Safe workflow
+1. Keep Metasploitable on DMZ_NET only; never use Bridged networking.
+2. Run nmap -p- -sV 192.168.1.10.
+3. Choose one module that matches a discovered service.
+4. Set RHOSTS 192.168.1.10 and LHOST 10.0.0.10.
+5. Run check where supported, then exploit only this target.
+6. Record minimal proof and test blocked lateral movement.
+
+## Vulnerability table
+| Finding | CVE | CVSS | Impact | Mitigation |
+|---|---|---:|---|---|
+| [exact scan finding] | [CVE] | [score] | [impact] | Patch, isolate, or replace |
+## Possible module
+Only if vsftpd 2.3.4 is detected: exploit/unix/ftp/vsftpd_234_backdoor. Do not use it otherwise.
+
+## Traffic filters
+- Target: ip.addr == 192.168.1.10
+- HTTP: http && ip.addr == 192.168.1.10
+- DNS: dns && ip.addr == 172.16.0.10
+- SSH: tcp.port == 22
+- SYN scan: tcp.flags.syn == 1 && tcp.flags.ack == 0
+
+## Conclusion
+Record whether segmentation prevented lateral movement and reference matching OPNsense logs.
